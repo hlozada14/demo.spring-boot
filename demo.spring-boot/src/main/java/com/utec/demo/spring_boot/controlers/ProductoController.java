@@ -5,16 +5,12 @@ import com.utec.demo.spring_boot.Producto.ProductoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/api/productos")
 
 public class ProductoController {
-    private static final List<Producto> BD = new ArrayList<>();
-    private static final AtomicLong NEXT_ID = new AtomicLong (1L);
 
     @GetMapping
     public List<Producto> listarProductos()
