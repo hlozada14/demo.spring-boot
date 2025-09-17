@@ -2,6 +2,8 @@ package com.utec.demo.spring_boot.controlers;
 
 import com.utec.demo.spring_boot.Producto.Producto;
 import com.utec.demo.spring_boot.Producto.ProductoDTO;
+import com.utec.demo.spring_boot.Producto.ProductoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,36 +11,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-
 public class ProductoController {
+    private final ProductoService productoService;
+
+    @Autowired
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
+    }
 
     @GetMapping
     public List<Producto> listarProductos()
     {
-        return BD;
+        return productoService.listar();
     }
     @PostMapping
     public Producto crearProducto(@RequestBody ProductoDTO productoDto) {
-        Producto nuevoProducto = new Producto(
-                                    NEXT_ID.getAndIncrement(),
-                                    productoDto.getNombre(),
-                                    productoDto.getPrecio());
-        BD.add(nuevoProducto);
-        return nuevoProducto;
+        return productoService.crear(productoDto);
     }
     @GetMapping("/{id}")
     public Producto obtenerProducto(@PathVariable Long id)
     {
-        return BD.stream()
-                        .filter(p -> p.getId().
-                        equals(id))
-                        .findFirst()
-                        .orElse(null);
+        return productoService.obtenerPorId(id);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id)
     {
-       Boolean notaEliminada = BD.removeIf(p -> p.getId().equals(id));
+       Boolean notaEliminada = productoService.eliminar(id);
         if (notaEliminada)
         {
             return ResponseEntity.noContent().build();
