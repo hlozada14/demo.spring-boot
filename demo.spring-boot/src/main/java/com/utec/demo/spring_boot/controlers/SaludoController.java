@@ -13,4 +13,9 @@ public class SaludoController {
     {
         return "Hola soy Humberto Lozada";
     }
+
+    @RestController
+    @RequestMapping("/api/products")
+    public static class ProductoControllerBD {
+    }
 }
